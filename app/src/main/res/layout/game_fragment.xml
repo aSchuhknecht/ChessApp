@@ -57,7 +57,7 @@
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/A1"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="30dp"
         />
 
     <Button
@@ -70,24 +70,24 @@
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/newGameTv"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="50dp"
         />
 
     <TextView
         android:id="@+id/PauseTv"
-        android:text="Pause"
+        android:text="Start"
         android:layout_width="100dp"
         android:layout_height="60dp"
         android:textSize="8pt"
         android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/newGameTv"
         app:layout_constraintTop_toBottomOf="@id/A1"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="20dp"
         />
 
     <Button
         android:id="@+id/PauseBut"
-        android:text="||"
+        android:text=">"
         android:layout_width="67dp"
         android:layout_height="60dp"
         android:textSize="12pt"
@@ -95,7 +95,32 @@
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/newGameBut"
         app:layout_constraintTop_toBottomOf="@id/newGameTv"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="60dp"
+        />
+
+    <TextView
+        android:id="@+id/OptionsTv"
+        android:text="Options"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:textSize="8pt"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/PauseTv"
+        app:layout_constraintTop_toBottomOf="@id/A1"
+        android:layout_marginStart="20dp"
+        />
+
+    <Button
+        android:id="@+id/OptionsBut"
+        android:text="O"
+        android:layout_width="67dp"
+        android:layout_height="60dp"
+        android:textSize="12pt"
+        android:gravity="center"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/PauseBut"
+        app:layout_constraintTop_toBottomOf="@id/OptionsTv"
+        android:layout_marginStart="50dp"
         />
 
 
@@ -159,7 +184,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/gray"
         android:layout_marginTop="30dp"
-        android:src="@drawable/brook"
+        android:src="@drawable/brook2"
         android:tag="70"
         />
 
@@ -174,7 +199,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/teal"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bknight"
+        android:src="@drawable/bknight2"
         android:tag="71"
 
         />
@@ -190,7 +215,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/gray"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bbishop"
+        android:src="@drawable/bbishop2"
         android:tag="72"
         />
 
@@ -205,7 +230,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/teal"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bqueen"
+        android:src="@drawable/bqueen2"
         android:tag="73"
         />
 
@@ -220,7 +245,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/gray"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bking"
+        android:src="@drawable/bking2"
         android:tag="74"
         />
 
@@ -235,7 +260,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/teal"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bbishop"
+        android:src="@drawable/bbishop2"
         android:tag="75"
         />
 
@@ -250,7 +275,7 @@
         app:layout_constraintTop_toBottomOf="@id/whiteTimer"
         android:background="@color/gray"
         android:layout_marginTop="30dp"
-        android:src="@drawable/bknight"
+        android:src="@drawable/bknight2"
         android:tag="76"
         />
 
@@ -266,7 +291,7 @@
         app:layout_constraintEnd_toStartOf="@id/frameR"
         android:background="@color/teal"
         android:layout_marginTop="30dp"
-        android:src="@drawable/brook"
+        android:src="@drawable/brook2"
         android:tag="77"
         />
 
@@ -282,7 +307,7 @@
         app:layout_constraintStart_toEndOf="@id/frameL"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/teal"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="60"
         />
 
@@ -296,7 +321,7 @@
         app:layout_constraintStart_toEndOf="@id/A8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/gray"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="61"
         />
 
@@ -310,7 +335,7 @@
         app:layout_constraintStart_toEndOf="@id/B8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/teal"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="62"
         />
 
@@ -324,7 +349,7 @@
         app:layout_constraintStart_toEndOf="@id/C8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/gray"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="63"
         />
 
@@ -338,7 +363,7 @@
         app:layout_constraintStart_toEndOf="@id/D8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/teal"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="64"
         />
 
@@ -352,7 +377,7 @@
         app:layout_constraintStart_toEndOf="@id/E8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/gray"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="65"
         />
 
@@ -366,7 +391,7 @@
         app:layout_constraintStart_toEndOf="@id/F8"
         app:layout_constraintTop_toBottomOf="@id/A8"
         android:background="@color/teal"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="66"
         />
 
@@ -381,7 +406,7 @@
         app:layout_constraintTop_toBottomOf="@id/A8"
         app:layout_constraintEnd_toStartOf="@id/frameR"
         android:background="@color/gray"
-        android:src="@drawable/bpawn"
+        android:src="@drawable/bpawn2"
         android:tag="67"
         />
 
@@ -815,7 +840,7 @@
         app:layout_constraintStart_toEndOf="@id/frameL"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/gray"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="10"
         />
 
@@ -829,7 +854,7 @@
         app:layout_constraintStart_toEndOf="@id/A8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/teal"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="11"
         />
 
@@ -843,7 +868,7 @@
         app:layout_constraintStart_toEndOf="@id/B8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/gray"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="12"
         />
 
@@ -857,7 +882,7 @@
         app:layout_constraintStart_toEndOf="@id/C8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/teal"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="13"
         />
 
@@ -871,7 +896,7 @@
         app:layout_constraintStart_toEndOf="@id/D8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/gray"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="14"
         />
 
@@ -885,7 +910,7 @@
         app:layout_constraintStart_toEndOf="@id/E8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/teal"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="15"
         />
 
@@ -899,7 +924,7 @@
         app:layout_constraintStart_toEndOf="@id/F8"
         app:layout_constraintTop_toBottomOf="@id/A3"
         android:background="@color/gray"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="16"
         />
 
@@ -914,7 +939,7 @@
         app:layout_constraintTop_toBottomOf="@id/A3"
         app:layout_constraintEnd_toStartOf="@id/frameR"
         android:background="@color/teal"
-        android:src="@drawable/wpawn"
+        android:src="@drawable/wpawn2"
         android:tag="17"
         />
 
@@ -928,7 +953,7 @@
         app:layout_constraintStart_toEndOf="@id/frameL"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/teal"
-        android:src="@drawable/wrook"
+        android:src="@drawable/wrook2"
         android:tag="00"
         />
 
@@ -942,7 +967,7 @@
         app:layout_constraintStart_toEndOf="@id/A8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/gray"
-        android:src="@drawable/wknight"
+        android:src="@drawable/wknight2"
         android:tag="01"
         />
 
@@ -956,7 +981,7 @@
         app:layout_constraintStart_toEndOf="@id/B8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/teal"
-        android:src="@drawable/wbishop"
+        android:src="@drawable/wbishop2"
         android:tag="02"
         />
 
@@ -970,7 +995,7 @@
         app:layout_constraintStart_toEndOf="@id/C8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/gray"
-        android:src="@drawable/wqueen"
+        android:src="@drawable/wqueen2"
         android:tag="03"
         />
 
@@ -984,7 +1009,7 @@
         app:layout_constraintStart_toEndOf="@id/D8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/teal"
-        android:src="@drawable/wking"
+        android:src="@drawable/wking2"
         android:tag="04"
         />
 
@@ -998,7 +1023,7 @@
         app:layout_constraintStart_toEndOf="@id/E8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/gray"
-        android:src="@drawable/wbishop"
+        android:src="@drawable/wbishop2"
         android:tag="05"
         />
 
@@ -1012,7 +1037,7 @@
         app:layout_constraintStart_toEndOf="@id/F8"
         app:layout_constraintTop_toBottomOf="@id/A2"
         android:background="@color/teal"
-        android:src="@drawable/wknight"
+        android:src="@drawable/wknight2"
         android:tag="06"
         />
 
@@ -1027,7 +1052,7 @@
         app:layout_constraintTop_toBottomOf="@id/A2"
         app:layout_constraintEnd_toStartOf="@id/frameR"
         android:background="@color/gray"
-        android:src="@drawable/wrook"
+        android:src="@drawable/wrook2"
         android:tag="07"
         />
 

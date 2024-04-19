@@ -12,4 +12,10 @@
         android:name="com.example.chessapp.GameFragment"
         tools:layout="@layout/game_fragment" />
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:label="Settings frag"
+        android:name="com.example.chessapp.SettingsFragment"
+        tools:layout="@layout/settings_fragment" />
+
 </navigation>

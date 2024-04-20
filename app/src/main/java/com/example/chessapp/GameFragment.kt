@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.chessapp.databinding.GameFragmentBinding
+import kotlin.math.abs
 
 
 class GameFragment: Fragment() {
@@ -67,62 +68,65 @@ class GameFragment: Fragment() {
 
         viewModel.observeSFMove().observe(viewLifecycleOwner) {it2 ->
 
-            val move = it2
-            val prow = move[1].digitToInt() - 1
-            val pcol = letterToCol(move[0].toString())
-            val nrow = move[3].digitToInt() - 1
-            val ncol = letterToCol(move[2].toString())
-            val ss = prow.toString() + pcol.toString() //selected square
-            val ns = nrow.toString()+ ncol.toString() //target square
+            if (!viewModel.returningFromSettings) {
+                val move = it2
+                val prow = move[1].digitToInt() - 1
+                val pcol = letterToCol(move[0].toString())
+                val nrow = move[3].digitToInt() - 1
+                val ncol = letterToCol(move[2].toString())
+                val ss = prow.toString() + pcol.toString() //selected square
+                val ns = nrow.toString() + ncol.toString() //target square
 
-            val prev = getViewByIndex(ss)
-            val target = getViewByIndex(ns)
+                val prev = getViewByIndex(ss)
+                val target = getViewByIndex(ns)
 
-            val res = getDrawableOnSquare(prev.tag.toString())
+                val res = getDrawableOnSquare(prev.tag.toString())
 
-            val viewColor = target.background as ColorDrawable
-            val colorId = viewColor.color
-            viewModel.prevColorCPU = colorId
-            viewModel.prevSquareCPU = ns
-            target.setBackgroundColor(Color.parseColor("#ADD8E6"))  // light blue
+                val viewColor = target.background as ColorDrawable
+                val colorId = viewColor.color
+                viewModel.prevColorCPU = colorId
+                viewModel.prevSquareCPU = ns
+                target.setBackgroundColor(Color.parseColor("#ADD8E6"))  // light blue
 
-            val prevPiece = viewModel.board[prow][pcol]
-            if (prevPiece.equals("bp")  && nrow == 0) {
-                viewModel.board[nrow][ncol] = "bq"
-                target.setImageResource(R.drawable.bqueen2)
-            }  else {
-                viewModel.board[nrow][ncol] = prevPiece
-                target.setImageResource(res)
-            }
-            if (prevPiece.equals("bk")) {
-                viewModel.bkSquare = target.tag.toString()
-            }
-
-            handleCastle(prow, pcol, nrow, ncol, false)  //moves the rook and handles rights
-            viewModel.board[prow][pcol] = "e"
-
-            prev.setImageResource(0)
-            viewModel.pieceSelected = false
-            swapTurns()
-            viewModel.syncBoard()
-            viewModel.wkSquareTest = viewModel.wkSquare
-            viewModel.bkSquareTest = viewModel.bkSquare
-
-            if (checkXM()) {
-                viewModel.gameOver = true
-                var winner = ""
-                if (viewModel.turn.equals("black"))  {
-                    winner = "White"
+                val prevPiece = viewModel.board[prow][pcol]
+                if (prevPiece.equals("bp") && nrow == 0) {
+                    viewModel.board[nrow][ncol] = "bq"
+                    target.setImageResource(R.drawable.bqueen2)
+                } else {
+                    viewModel.board[nrow][ncol] = prevPiece
+                    target.setImageResource(res)
                 }
-                else  {
-                    winner  =  "Black"
+                if (prevPiece.equals("bk")) {
+                    viewModel.bkSquare = target.tag.toString()
                 }
-                Toast.makeText(
-                    activity, winner + " wins by checkmate!",
-                    Toast.LENGTH_LONG
-                ).show()
-                binding.allContent.setBackgroundColor(Color.LTGRAY)
+
+                handleCastle(prow, pcol, nrow, ncol, false)  //moves the rook and handles rights
+                viewModel.board[prow][pcol] = "e"
+
+                prev.setImageResource(0)
+                viewModel.pieceSelected = false
+                swapTurns()
+                viewModel.syncBoard()
+                calculateMaterial()
+                viewModel.wkSquareTest = viewModel.wkSquare
+                viewModel.bkSquareTest = viewModel.bkSquare
+
+                if (checkXM()) {
+                    viewModel.gameOver = true
+                    var winner = ""
+                    if (viewModel.turn.equals("black")) {
+                        winner = "White"
+                    } else {
+                        winner = "Black"
+                    }
+                    Toast.makeText(
+                        activity, winner + " wins by checkmate!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    binding.allContent.setBackgroundColor(Color.LTGRAY)
+                }
             }
+
         }
 
         binding.PauseBut.setOnClickListener {
@@ -205,7 +209,9 @@ class GameFragment: Fragment() {
                     viewModel.pieceSelected = false
                     resetSelection()
                     swapTurns()
+                    calculateMaterial()
                     viewModel.syncBoard()
+                    viewModel.returningFromSettings = false
                     viewModel.wkSquareTest = viewModel.wkSquare
                     viewModel.bkSquareTest = viewModel.bkSquare
 
@@ -226,7 +232,7 @@ class GameFragment: Fragment() {
                     }
                     else {
                         viewModel.genFEN()
-                        if (viewModel.turn.equals("black")) {
+                        if (viewModel.turn.equals("black") && viewModel.mode.equals("cpu")) {
                             viewModel.netRefresh()
                         }
                     }
@@ -416,6 +422,8 @@ class GameFragment: Fragment() {
         viewModel.resetGame()
         binding.PauseTv.text = "Start"
         binding.PauseBut.text = ">"
+        binding.whiteMaterial.text = ""
+        binding.blackMaterial.text = ""
         redrawBoard()
     }
 
@@ -970,6 +978,60 @@ class GameFragment: Fragment() {
             viewModel.blackCanCastleLong = false
         }
 
+    }
+
+    private fun calculateMaterial() {
+
+        var whiteTotal = 0
+        var blackTotal = 0
+
+        for (i in 0..7) {
+            for (j in 0..7) {
+                val piece = viewModel.testBoard[i][j]
+                if (whitePieces.contains(piece))  {
+                    whiteTotal += getPieceVal(piece)
+                } else if (blackPieces.contains(piece)){
+                    blackTotal += getPieceVal(piece)
+                }
+            }
+        }
+
+        val diff = abs(whiteTotal - blackTotal)
+        val vstring = "+$diff"
+
+        if (whiteTotal > blackTotal) {
+            binding.whiteMaterial.text = vstring
+            binding.blackMaterial.text = ""
+        }
+        else if (blackTotal > whiteTotal) {
+            binding.whiteMaterial.text = ""
+            binding.blackMaterial.text = vstring
+        } else {
+            binding.whiteMaterial.text = ""
+            binding.blackMaterial.text = ""
+        }
+
+    }
+
+    private fun getPieceVal(p: String): Int {
+
+        var value = 0
+        when (p) {
+            "wp" -> value= 1
+            "wr" -> value = 5
+            "wb" -> value = 3
+            "wq" -> value = 9
+            "wk" -> value = 0
+            "wn" -> value = 3
+            "bp" -> value = 1
+            "br" -> value= 5
+            "bb" -> value = 3
+            "bq" -> value = 9
+            "bk" -> value = 0
+            "bn" -> value = 3
+            "e" -> value = 0
+        }
+        return  value
     }
 
     override fun onDestroyView() {

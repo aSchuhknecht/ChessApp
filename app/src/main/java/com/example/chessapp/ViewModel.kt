@@ -45,7 +45,9 @@ class ViewModel (application: Application) : AndroidViewModel(application) {
     var bkSquareTest =  "74"
     var timerStarted = false
     var difficulty = "Med"
-    var depth = 15
+    var depth = 5
+    var mode = "player"
+    var returningFromSettings = false
 
     var whiteduration = "5:00"
     var blackduration = "5:00"
@@ -218,6 +220,8 @@ class ViewModel (application: Application) : AndroidViewModel(application) {
         blackduration = "5:00"
         prevSquareCPU =  ""
         prevColorCPU  = 0
+        depth = 5
+        returningFromSettings = false
     }
 
     fun printTestBoard() {

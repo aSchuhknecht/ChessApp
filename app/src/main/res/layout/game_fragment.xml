@@ -47,6 +47,32 @@
         android:textColor="@color/white"
         />
 
+    <TextView
+        android:id="@+id/whiteMaterial"
+        android:text="  "
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:textSize="8pt"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/whiteTimer"
+        app:layout_constraintTop_toBottomOf="@id/whiteTimer"
+        android:layout_marginStart="30dp"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/blackMaterial"
+        android:text="  "
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:textSize="8pt"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/blackTimer"
+        app:layout_constraintTop_toBottomOf="@id/blackTimer"
+        android:layout_marginStart="30dp"
+        android:textColor="@color/black"
+        />
+
 
     <TextView
         android:id="@+id/newGameTv"

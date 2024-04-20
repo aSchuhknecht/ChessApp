@@ -2,6 +2,7 @@ package com.example.chessapp
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,56 +30,86 @@ class SettingsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var diff = viewModel.difficulty
+        var depth = viewModel.depth
+        var mode = viewModel.mode
 
-        if (viewModel.difficulty.equals("Easy")) {
+        if (viewModel.depth==1) {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ff0000")) // red
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ffffff")) // white
         }
-        else if (viewModel.difficulty.equals("Med")) {
+        else if (viewModel.depth==5) {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ff0000")) // red
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ffffff")) // white
         }
-        else if (viewModel.difficulty.equals("Hard")) {
+        else if (viewModel.depth==12) {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ff0000")) // red
         }
 
+
+        if (viewModel.mode.equals("player")) {
+            binding.modePVP.setBackgroundColor(Color.parseColor("#ff0000")) // red
+            binding.modeCPU.setBackgroundColor(Color.parseColor("#ffffff")) // whitee
+        }
+        else if (viewModel.mode.equals("cpu")) {
+            binding.modePVP.setBackgroundColor(Color.parseColor("#ffffff"))
+            binding.modeCPU.setBackgroundColor(Color.parseColor("#ff0000"))
+        }
+
+        binding.modePVP.setOnClickListener {
+            binding.modePVP.setBackgroundColor(Color.parseColor("#ff0000")) // red
+            binding.modeCPU.setBackgroundColor(Color.parseColor("#ffffff")) // whitee
+            mode = "player"
+        }
+
+        binding.modeCPU.setOnClickListener {
+            binding.modePVP.setBackgroundColor(Color.parseColor("#ffffff"))
+            binding.modeCPU.setBackgroundColor(Color.parseColor("#ff0000"))
+            mode = "cpu"
+        }
+
+
         binding.difficultyEasy.setOnClickListener {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ff0000")) // red
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ffffff")) // white
-            diff  = "Easy"
+            depth =1
         }
 
         binding.difficultyMed.setOnClickListener {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ff0000")) // red
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ffffff")) // white
-            diff = "Med"
+            depth =5
         }
 
         binding.difficultyHard.setOnClickListener {
             binding.difficultyEasy.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyMed.setBackgroundColor(Color.parseColor("#ffffff")) // white
             binding.difficultyHard.setBackgroundColor(Color.parseColor("#ff0000")) // red
-            diff = "Hard"
+            depth =12
         }
 
         binding.cancelButton.setOnClickListener {
+            viewModel.returningFromSettings = true
             findNavController().popBackStack()
         }
 
         binding.confirmButton.setOnClickListener {
-            viewModel.difficulty = diff
+            viewModel.depth = depth
+            viewModel.mode = mode
             val wt = binding.whiteTimerET.text.toString()
             val bt = binding.blackTimerET.text.toString()
-            viewModel.whiteduration  = "$wt:00"
-            viewModel.blackduration  = "$bt:00"
 
+            if (wt.isNotEmpty()) {
+                viewModel.whiteduration  = "$wt:00"
+                viewModel.blackduration  = "$bt:00"
+            }
+
+            viewModel.returningFromSettings = true
             findNavController().popBackStack()
         }
     }

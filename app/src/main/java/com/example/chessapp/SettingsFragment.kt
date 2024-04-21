@@ -105,10 +105,13 @@ class SettingsFragment: Fragment() {
             val bt = binding.blackTimerET.text.toString()
 
             if (wt.isNotEmpty()) {
-                viewModel.whiteduration  = "$wt:00"
-                viewModel.blackduration  = "$bt:00"
+                val wtl = wt.toLong() * 1000
+                viewModel.whiteTime = wtl
             }
-
+            if (bt.isNotEmpty()) {
+                val btl = bt.toLong() * 1000
+                viewModel.blackTime  = btl
+            }
             viewModel.returningFromSettings = true
             findNavController().popBackStack()
         }

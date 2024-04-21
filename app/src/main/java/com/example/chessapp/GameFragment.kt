@@ -14,7 +14,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.chessapp.databinding.GameFragmentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
 import kotlin.math.abs
+import kotlin.math.floor
 
 
 class GameFragment: Fragment() {
@@ -23,8 +30,9 @@ class GameFragment: Fragment() {
     private val viewModel: ViewModel by activityViewModels()
     private val binding get() = _binding!!
 
-    private lateinit var timerWhite: Timer
-    private lateinit var timerBlack: Timer
+    private lateinit var whiteTimer: Timer
+    private lateinit var blackTimer: Timer
+    private lateinit var job: Job
     private var timerActive = false
 
     private var whitePieces = listOf("wp", "wb", "wr", "wn", "wq", "wk")
@@ -42,6 +50,10 @@ class GameFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        timerActive = false
+        whiteTimer = Timer(binding.whiteTimer)
+        blackTimer = Timer(binding.blackTimer)
+
         val clayout = binding.allContent
         for (i in 0 until clayout.childCount) {
             val v: View = clayout.getChildAt(i)
@@ -51,10 +63,10 @@ class GameFragment: Fragment() {
         }
 
         redrawBoard()
-        val whiteTimer = Timer(binding.whiteTimer)
-        val blackTimer = Timer(binding.blackTimer)
-        binding.whiteTimer.text = viewModel.whiteduration
-        binding.blackTimer.text = viewModel.blackduration
+        Log.d("test", viewModel.whiteTime.toString())
+        Log.d("test", viewModel.blackTime.toString())
+        binding.whiteTimer.text = millisToMins(viewModel.whiteTime)
+        binding.blackTimer.text = millisToMins(viewModel.blackTime)
 
         binding.newGameBut.setOnClickListener {
             //reset yellow highlighting for CPU move
@@ -125,32 +137,92 @@ class GameFragment: Fragment() {
                     ).show()
                     binding.allContent.setBackgroundColor(Color.LTGRAY)
                 }
+                viewModel.blackTime = blackTimer.millisLeft()
+                stopTimer()
+                startTimer(whiteTimer)
             }
 
         }
 
         binding.PauseBut.setOnClickListener {
-            if (viewModel.timerStarted) {
-                viewModel.timerStarted = false
+            if (timerActive && !viewModel.gameOver) {
+                timerActive = false
                 binding.PauseBut.text = ">"
                 binding.PauseTv.text = "Start"
+                if (viewModel.turn.equals("white")) {
+                    viewModel.whiteTime = whiteTimer.millisLeft()
+                }
+                else {
+                    viewModel.blackTime = blackTimer.millisLeft()
+                }
+                stopTimer()
 
             } else {
-                viewModel.timerStarted = true
-                binding.PauseBut.text = "||"
-                binding.PauseTv.text = "Pause"
+                if (!viewModel.gameOver) {
+                    timerActive = true
+                    binding.PauseBut.text = "||"
+                    binding.PauseTv.text = "Pause"
+                    if (viewModel.turn.equals("white")) {
+                        startTimer(whiteTimer)
+                    } else {
+                        startTimer(blackTimer)
+                    }
+                }
             }
         }
 
         binding.OptionsBut.setOnClickListener {
-            findNavController().navigate(R.id.settingsFragment)
+            if (!viewModel.gameOver) {
+                if (timerActive) {
+                    if (viewModel.turn.equals("white")) {
+                        viewModel.whiteTime = whiteTimer.millisLeft()
+                    } else {
+                        viewModel.blackTime = blackTimer.millisLeft()
+                    }
+                    stopTimer()
+                }
+                findNavController().navigate(R.id.settingsFragment)
+            }
         }
+    }
+
+    fun startTimer(timer: Timer) {
+        job = Job()
+        val uiScope = CoroutineScope(Dispatchers.Main + job)
+        uiScope.launch {
+            val timerJob = async {
+                timerActive = true
+                if (viewModel.turn.equals("white")) {
+                    timer.timerCo(viewModel.whiteTime)
+                }
+                else {
+                    timer.timerCo(viewModel.blackTime)
+                }
+                timerActive = false
+                viewModel.gameOver = true
+                var winner = ""
+                if (viewModel.turn.equals("black")) {
+                    winner = "White"
+                } else {
+                    winner = "Black"
+                }
+                Toast.makeText(
+                    activity, winner + " wins on time!",
+                    Toast.LENGTH_LONG
+                ).show()
+                binding.allContent.setBackgroundColor(Color.LTGRAY)
+            }
+        }
+    }
+
+    fun stopTimer() {
+        job.cancel()
     }
 
     fun setClickListeners(v: ImageView) {
 
         v.setOnClickListener{
-            if (!viewModel.pieceSelected  && !viewModel.gameOver) {
+            if (!viewModel.pieceSelected  && !viewModel.gameOver &&  timerActive) {
                 if (isValidPiece(it)) {
 
                     val viewColor = it.background as ColorDrawable
@@ -163,7 +235,7 @@ class GameFragment: Fragment() {
 
                 }
             } else {
-                if (isLegalMove(it) && !testMoveForCheck(it)  && !viewModel.gameOver) {
+                if (isLegalMove(it) && !testMoveForCheck(it)  && !viewModel.gameOver && timerActive) {
 
                     //reset yellow highlighting for CPU move
                     if (!viewModel.prevSquareCPU.equals("")) {
@@ -231,6 +303,19 @@ class GameFragment: Fragment() {
                         binding.allContent.setBackgroundColor(Color.LTGRAY)
                     }
                     else {
+
+                        if (viewModel.turn.equals("black")) {
+                            viewModel.whiteTime = whiteTimer.millisLeft()
+                            stopTimer()
+                            startTimer(blackTimer)
+                        }
+                        else {
+                            viewModel.blackTime = blackTimer.millisLeft()
+                            stopTimer()
+                            startTimer(whiteTimer)
+                        }
+
+
                         viewModel.genFEN()
                         if (viewModel.turn.equals("black") && viewModel.mode.equals("cpu")) {
                             viewModel.netRefresh()
@@ -241,7 +326,7 @@ class GameFragment: Fragment() {
                 else {
                     //made illegal move
                     Log.d("tag", "illegal move")
-                    if  (!viewModel.gameOver) {
+                    if  (!viewModel.gameOver && timerActive) {
                         val prev = getViewByIndex(viewModel.selectedSqaure)
                         prev.setBackgroundColor(viewModel.prevColor)
                         viewModel.pieceSelected = false
@@ -420,10 +505,13 @@ class GameFragment: Fragment() {
     private fun resetGame() {
 
         viewModel.resetGame()
+        timerActive = false
         binding.PauseTv.text = "Start"
         binding.PauseBut.text = ">"
         binding.whiteMaterial.text = ""
         binding.blackMaterial.text = ""
+        binding.whiteTimer.text = millisToMins(viewModel.whiteTime)
+        binding.blackTimer.text = millisToMins(viewModel.blackTime)
         redrawBoard()
     }
 
@@ -437,6 +525,17 @@ class GameFragment: Fragment() {
                 p.setImageResource(d)
             }
         }
+    }
+
+    private fun millisToMins(millis: Long): String {
+
+        val total_seconds = (millis) / 1000.0
+        val minutes = floor(total_seconds / 60.0).toInt()
+        val seconds = (total_seconds % 60).toInt()
+        val m = "%02d".format(minutes)
+        val s = "%02d".format(seconds)
+        val str = m + ":" + s
+        return str
     }
 
     private fun inCheck(color: String):  Boolean {

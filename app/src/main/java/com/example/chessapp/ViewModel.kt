@@ -51,6 +51,8 @@ class ViewModel (application: Application) : AndroidViewModel(application) {
 
     var whiteduration = "5:00"
     var blackduration = "5:00"
+    var whiteTime = 300000L
+    var blackTime = 300000L
 
     var board = arrayOf(arrayOf("wr", "wn", "wb", "wq", "wk", "wb", "wn", "wr"),
         arrayOf("wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"),
@@ -218,6 +220,8 @@ class ViewModel (application: Application) : AndroidViewModel(application) {
         timerStarted = false
         whiteduration = "5:00"
         blackduration = "5:00"
+        whiteTime = 300000L
+        blackTime = 300000L
         prevSquareCPU =  ""
         prevColorCPU  = 0
         depth = 5

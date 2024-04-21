@@ -63,8 +63,6 @@ class GameFragment: Fragment() {
         }
 
         redrawBoard()
-        Log.d("test", viewModel.whiteTime.toString())
-        Log.d("test", viewModel.blackTime.toString())
         binding.whiteTimer.text = millisToMins(viewModel.whiteTime)
         binding.blackTimer.text = millisToMins(viewModel.blackTime)
 
@@ -73,6 +71,9 @@ class GameFragment: Fragment() {
             if (!viewModel.prevSquareCPU.equals("")) {
                 val target = getViewByIndex(viewModel.prevSquareCPU)
                 target.setBackgroundColor(viewModel.prevColorCPU)
+            }
+            if (timerActive)  {
+                stopTimer()
             }
             resetGame()
             binding.allContent.setBackgroundColor(Color.WHITE)

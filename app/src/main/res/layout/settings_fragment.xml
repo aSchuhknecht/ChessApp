@@ -93,7 +93,7 @@
 
     <TextView
         android:id="@+id/modeTV"
-        android:text="Choose Difficulty: "
+        android:text="Choose Mode: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="8pt"
@@ -119,7 +119,7 @@
 
     <TextView
         android:id="@+id/modeCPU"
-        android:text="CPU"
+        android:text="Computer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="8pt"
@@ -127,7 +127,7 @@
         app:layout_constraintStart_toEndOf="@id/modePVP"
         app:layout_constraintTop_toTopOf="@id/modePVP"
         android:textColor="@color/black"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         />
 
 
